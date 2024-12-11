@@ -20,12 +20,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/grocery/product", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GroceryController {
+public class ProductController {
 
     @Autowired
-    private  ExcelReaderService excelReaderService;
+    private ExcelReaderService excelReaderService;
     @Autowired
-    private  ProductService productService;
+    private ProductService productService;
 
     //This is bulk quantity updalod mehtod in which we are reading excel file of product list and inserting
     // it into grcery intems table
@@ -59,8 +59,16 @@ public class GroceryController {
         }
     }
 
-    @GetMapping("/getPage")
-    public String getPage() {
-        return "This is public page";
+    @GetMapping("/getAllProducts")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
+
+    @GetMapping("/getProduct")
+    public ResponseEntity<Product>getProduct(@RequestParam String pId) {
+        Product product = productService.getProduct(pId);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 }
+

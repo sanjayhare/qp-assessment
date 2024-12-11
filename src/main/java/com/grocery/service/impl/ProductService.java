@@ -20,6 +20,17 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public List<Product> getAllProducts()
+    {
+        List<Product> products =  productRepository.findAll();
+        return products;
+    }
+    public Product getProduct(String id)
+    {
+        Product product=  productRepository.findById(Long.valueOf(id)).orElseThrow(
+                () -> new ResourceNotFoundException("Product", "ProductID", id));
+        return product;
+    }
     public List<Product> insertProducts(List<Product> products)
     {
         productRepository.saveAll(products);
