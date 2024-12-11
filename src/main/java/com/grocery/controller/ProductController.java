@@ -34,7 +34,7 @@ public class ProductController {
         try {
             List<Product> products = excelReaderService.readProductsFromExcel(file.getInputStream());
             if (products != null && products.size() > 0) {
-                products = productService.insertProducts(products);
+                products = productService.insertAllProducts(products);
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ResponseDto(GroceryConstants.STATUS_201, GroceryConstants.MESSAGE_201));
             } else {
@@ -66,9 +66,21 @@ public class ProductController {
     }
 
     @GetMapping("/getProduct")
-    public ResponseEntity<Product>getProduct(@RequestParam String pId) {
+    public ResponseEntity<Product> getProduct(@RequestParam String pId) {
         Product product = productService.getProduct(pId);
         return ResponseEntity.status(HttpStatus.OK).body(product);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseDto>  createProduct(@RequestBody Product product) {
+        boolean iProductInserted = productService.insertProduct(product);
+        if (iProductInserted == true) {
+            return ResponseEntity.status(HttpStatus.CREATED).
+                    body(new ResponseDto(GroceryConstants.STATUS_201, GroceryConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body(new ResponseDto(GroceryConstants.STATUS_417, GroceryConstants.MESSAGE_417_UPDATE));
+        }
     }
 }
 

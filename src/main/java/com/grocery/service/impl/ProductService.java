@@ -3,49 +3,66 @@ package com.grocery.service.impl;
 import com.grocery.entity.Product;
 import com.grocery.exception.ResourceNotFoundException;
 import com.grocery.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-
 public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> getAllProducts()
-    {
-        List<Product> products =  productRepository.findAll();
+    public List<Product> getAllProducts() {
+        List<Product> products = productRepository.findAll();
         return products;
     }
-    public Product getProduct(String id)
-    {
-        Product product=  productRepository.findById(Long.valueOf(id)).orElseThrow(
+
+    public Product getProduct(String id) {
+        Product product = productRepository.findById(Long.valueOf(id)).orElseThrow(
                 () -> new ResourceNotFoundException("Product", "ProductID", id));
         return product;
     }
-    public List<Product> insertProducts(List<Product> products)
-    {
-        productRepository.saveAll(products);
-        return products;
+
+    public List<Product> insertAllProducts(List<Product> products) {
+        List<Product> newProductList = new ArrayList<>();
+        for (Product product : products) {
+            System.out.println("before searching name:" + product.getProductName().trim());
+            Product existingProduct = productRepository.findByProductName(product.getProductName().trim());
+            if (existingProduct != null && existingProduct.getProductId() > 0) {
+                System.out.println("in if loop");
+                Long productQuantity = existingProduct.getProductQuantity() + product.getProductQuantity();
+                existingProduct.setProductQuantity(productQuantity);
+                Product updatedProduct = productRepository.save(existingProduct);
+                newProductList.add(updatedProduct);
+            } else {
+                System.out.println("in else loop");
+                Product insertedProduct = productRepository.save(product);
+                newProductList.add(insertedProduct);
+            }
+        }
+        return newProductList;
     }
-    public boolean updateProduct(Product product)
-    {
+
+    public boolean insertProduct(Product product) {
+        boolean isInserted = false;
+        Product insertedProduct = productRepository.save(product);
+        if (insertedProduct != null && insertedProduct.getProductId() > 0) {
+            isInserted = true;
+        }
+        return isInserted;
+    }
+
+    public boolean updateProduct(Product product) {
         boolean isProductUpdated = false;
-        Long  pId = product.getProductId();
-        Product oldProduct=  productRepository.findById(product.getProductId()).orElseThrow(
-               () -> new ResourceNotFoundException("Product", "ProductID", String.valueOf(pId)));
-        if(oldProduct!=null)
-        {
+        Long pId = product.getProductId();
+        Product oldProduct = productRepository.findById(product.getProductId()).orElseThrow(
+                () -> new ResourceNotFoundException("Product", "ProductID", String.valueOf(pId)));
+        if (oldProduct != null) {
             product = productRepository.save(product);
-            isProductUpdated =true;
+            isProductUpdated = true;
         }
         return isProductUpdated;
     }
