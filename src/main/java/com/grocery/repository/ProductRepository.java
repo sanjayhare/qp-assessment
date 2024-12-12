@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     /*@Query("SELECT p FROM Project p WHERE p.projectName like %:projectName%")
     List<Product> findByProjectName(@Param("projectName") String projectName);

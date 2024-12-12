@@ -2,12 +2,14 @@ package com.grocery.service.impl;
 
 import com.grocery.dto.UserListDto;
 import com.grocery.dto.UsersDto;
+import com.grocery.entity.Cart;
 import com.grocery.entity.SecurityUser;
 import com.grocery.entity.Users;
 import com.grocery.exception.CustomerAlreadyExistsException;
 import com.grocery.exception.ResourceNotFoundException;
 import com.grocery.mapper.UsersListMapper;
 import com.grocery.mapper.UsersMapper;
+import com.grocery.repository.CartRepository;
 import com.grocery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,8 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     public UsersDto getUserDetails(String userID) {
         boolean isUpdated = false;
@@ -40,7 +44,10 @@ public class UserServiceImpl implements UserDetailsService {
         }
 
         user.setAuthorities("ROLE_USER");
-        userRepository.save(user);
+        Users savedUser =userRepository.save(user);
+        Cart cart = new Cart();
+        cart.setUser(savedUser);
+        cartRepository.save(cart);
 
     }
 

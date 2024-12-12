@@ -1,9 +1,7 @@
 package com.grocery.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,7 +13,7 @@ public class Users extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native",strategy = "native")
-    private int personId;
+    private Integer personId;
 
     @NotNull(message = "Name cannot be blank")
     @Size(min = 3, message = "Name be must be at least 3 characters long")
@@ -43,5 +41,9 @@ public class Users extends BaseEntity {
     private String pwd;
 
     private String authorities;
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
 }

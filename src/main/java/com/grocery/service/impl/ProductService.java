@@ -21,7 +21,7 @@ public class ProductService {
     }
 
     public Product getProduct(String id) {
-        Product product = productRepository.findById(Long.valueOf(id)).orElseThrow(
+        Product product = productRepository.findById(Integer.valueOf(id)).orElseThrow(
                 () -> new ResourceNotFoundException("Product", "ProductID", id));
         return product;
     }
@@ -57,7 +57,7 @@ public class ProductService {
 
     public boolean updateProduct(Product product) {
         boolean isProductUpdated = false;
-        Long pId = product.getProductId();
+        int pId = product.getProductId();
         Product oldProduct = productRepository.findById(product.getProductId()).orElseThrow(
                 () -> new ResourceNotFoundException("Product", "ProductID", String.valueOf(pId)));
         if (oldProduct != null) {

@@ -6,14 +6,14 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
-@Table(name = "grocery_items")
+@Table(name = "products")
 @Data
 public class Product extends  BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native",strategy = "native")
-    private Long productId;
+    private Integer productId;
 
     private String productName;
 

@@ -29,3 +29,21 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `updated_by` varchar(50) DEFAULT NULL,
    PRIMARY KEY (`person_Id`)
 );
+
+CREATE TABLE carts (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(person_Id)
+);
+
+
+CREATE TABLE cart_items (
+    cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (cart_id) REFERENCES carts(cart_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
