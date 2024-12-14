@@ -44,6 +44,7 @@ public class CartService {
             // Update the quantity of the existing cart item
             CartItem cartItem = existingCartItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItem.setPrice(cartItem.getPrice() + (quantity* product.getProductPrice()));
             cartItemRepository.save(cartItem);
         } else {
             // Add a new cart item
@@ -51,6 +52,7 @@ public class CartService {
             newCartItem.setCart(cart);
             newCartItem.setProduct(product);
             newCartItem.setQuantity(quantity);
+            newCartItem.setPrice(quantity* product.getProductPrice());
             cartItemRepository.save(newCartItem);
         }
     }
