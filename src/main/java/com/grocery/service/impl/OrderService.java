@@ -2,6 +2,7 @@ package com.grocery.service.impl;
 
 
 import com.grocery.entity.*;
+import com.grocery.exception.ResourceNotFoundException;
 import com.grocery.repository.CartRepository;
 import com.grocery.repository.OrderRepository;
 import com.grocery.repository.UserRepository;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Service
 public class OrderService {
+
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
@@ -20,20 +22,16 @@ public class OrderService {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
     }
-
     public Order placeOrder(Integer userId) {
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User", "UserID", String.valueOf(userId)));
         Cart cart = user.getCart();
         List<CartItem> cartItems = cart.getCartItems();
-
         Order order = new Order();
         order.setUser(user);
-
         double totalAmount = 0.0;
-
-        for (CartItem cartItem : cartItems) {
+        for (CartItem cartItem : cartItems)
+        {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setProductName(cartItem.getProduct().getProductName());
@@ -41,11 +39,13 @@ public class OrderService {
             orderItem.setPrice(cartItem.getPrice());
             orderItem.setProduct(cartItem.getProduct());
             order.getOrderItems().add(orderItem);
-            totalAmount += cartItem.getPrice() * cartItem.getQuantity();
+            totalAmount += cartItem.getPrice();
         }
         order.setTotalAmount(totalAmount);
         cart.getCartItems().clear(); // Clear the cart after placing the order
-
         return orderRepository.save(order);
+    }
+    public List<Order> getOrdersByUser(Integer userId) {
+        return orderRepository.findByUser_PersonId(userId);
     }
 }

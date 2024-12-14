@@ -19,11 +19,18 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class ProjectSecuirtyConfig {
+
+
     @Autowired
     private UserAuthFilter userAuthFilter;
+
+    @Autowired
+    private URLConfig urlConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,6 +39,7 @@ public class ProjectSecuirtyConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName("_csrf");
         http.sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -48,17 +56,19 @@ public class ProjectSecuirtyConfig {
                         return config;
                     }
                 }))
-                .csrf(csrfCustomizer ->csrfCustomizer.disable())
-                      /*  csrfCustomizer.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/**")
-                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))*/
-                .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-               // .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/task/**").permitAll())
-
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .csrf(csrfCustomizer -> csrfCustomizer.disable())
+                /*  csrfCustomizer.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/**")
+                          .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))*/
+                .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+        // .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/task/**").permitAll())
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+       /* http.authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/grocery/product/**").hasRole("ADMIN")
+                        .requestMatchers("/grocery/auth/**").permitAll())*/
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
-
 }

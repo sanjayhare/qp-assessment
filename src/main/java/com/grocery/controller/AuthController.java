@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(path = "/grocery/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/grocery/auth/", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<ResponseDto> createUser(@Valid @RequestBody Users user) {
         user.setPwd(passwordEncoder.encode(user.getPwd()));
         userService.createUser(user);
@@ -42,7 +42,7 @@ public class AuthController {
                 .body(new ResponseDto(GroceryConstants.STATUS_201, GroceryConstants.MESSAGE_201));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("authenticate")
     public ResponseEntity authenticationPage(@RequestBody AuthenticateRequestDto authenticateRequestDto) {
         System.out.println("/authenticate");
         authenticate(authenticateRequestDto);

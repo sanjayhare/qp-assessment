@@ -1,5 +1,7 @@
 package com.grocery.controller;
 
+import com.grocery.constant.GroceryConstants;
+import com.grocery.dto.ResponseDto;
 import com.grocery.entity.Cart;
 import com.grocery.service.impl.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,12 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/{cartId}/add-product")
-    public ResponseEntity<String> addProductToCart(
+    public ResponseEntity<ResponseDto> addProductToCart(
             @PathVariable Integer cartId,
             @RequestParam Integer productId,
             @RequestParam Integer quantity) {
         cartService.addProductToCart(cartId, productId, quantity);
-        return ResponseEntity.ok("Product added to cart successfully");
+        return ResponseEntity.ok(new ResponseDto(GroceryConstants.STATUS_201,GroceryConstants.CART_MESSAGE_201));
     }
 
     @GetMapping("/{userId}/cart")

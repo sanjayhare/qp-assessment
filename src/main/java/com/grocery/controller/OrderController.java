@@ -23,4 +23,10 @@ public class OrderController {
         Order order = orderService.placeOrder(userId);
         return ResponseEntity.ok(order);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Order>> getOrders(@PathVariable Integer userId) {
+        List<Order> orders = orderService.getOrdersByUser(userId);
+        return ResponseEntity.ok(orders);
+    }
 }

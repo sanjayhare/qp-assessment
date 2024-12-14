@@ -59,13 +59,13 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/getAllProducts")
+    @GetMapping("/get/AllProducts")
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
-    @GetMapping("/getProduct")
+    @GetMapping("/get/Product")
     public ResponseEntity<Product> getProduct(@RequestParam String pId) {
         Product product = productService.getProduct(pId);
         return ResponseEntity.status(HttpStatus.OK).body(product);

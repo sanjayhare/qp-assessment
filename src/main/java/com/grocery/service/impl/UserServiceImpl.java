@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserDetailsService {
             throw new CustomerAlreadyExistsException("User already registered with given EmailId: " + user.getEmailId());
         }
 
-        user.setAuthorities("ROLE_USER");
+        user.setAuthorities("ROLE_ADMIN");
         Users savedUser =userRepository.save(user);
         Cart cart = new Cart();
         cart.setUser(savedUser);
