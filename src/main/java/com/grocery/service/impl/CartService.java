@@ -3,6 +3,7 @@ package com.grocery.service.impl;
 import com.grocery.entity.Cart;
 import com.grocery.entity.CartItem;
 import com.grocery.entity.Product;
+import com.grocery.exception.GroceryMessegeException;
 import com.grocery.exception.ResourceNotFoundException;
 import com.grocery.repository.CartItemRepository;
 import com.grocery.repository.CartRepository;
@@ -37,6 +38,11 @@ public class CartService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", String.valueOf(productId)));
 
         // Check if the product is already in the cart
+        if(quantity!=null && quantity>product.getProductQuantity())
+        {
+            throw  new GroceryMessegeException("Product are out of stock ");
+        }
+
         Optional<CartItem> existingCartItem = cartItemRepository.findByCartAndProduct(cart, product);
 
         if (existingCartItem.isPresent()) {
@@ -50,7 +56,7 @@ public class CartService {
             CartItem newCartItem = new CartItem();
             newCartItem.setCart(cart);
             newCartItem.setProduct(product);
-            newCartItem.setQuantity(quantity);
+                newCartItem.setQuantity(quantity);
             newCartItem.setPrice(quantity* product.getProductPrice());
             cartItemRepository.save(newCartItem);
         }

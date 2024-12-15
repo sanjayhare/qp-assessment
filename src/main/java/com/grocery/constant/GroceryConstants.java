@@ -20,4 +20,5 @@ public final class GroceryConstants {
     public static final String  STATUS_500 = "500";
     public static final String  MESSAGE_500 = "An error occurred. Please try again or contact Dev team";
     public static final String  CART_MESSAGE_201 = "Product added to cart successfully";
+    public static final String  ORDER_MESSAGE_201 = "Your Order is placed successfully";
 }

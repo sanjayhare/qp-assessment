@@ -1,12 +1,13 @@
 package com.grocery.controller;
 
+import com.grocery.constant.GroceryConstants;
+import com.grocery.dto.ResponseDto;
 import com.grocery.entity.Order;
 import com.grocery.entity.OrderItem;
 
 import com.grocery.service.impl.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,9 +20,9 @@ public class OrderController {
     }
 
     @PostMapping("/place/{userId}")
-    public ResponseEntity<Order> placeOrder(@PathVariable Integer userId) {
+    public ResponseEntity<ResponseDto> placeOrder(@PathVariable Integer userId) {
         Order order = orderService.placeOrder(userId);
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(new ResponseDto(GroceryConstants.STATUS_201,GroceryConstants.ORDER_MESSAGE_201));
     }
 
     @GetMapping("/user/{userId}")
