@@ -62,11 +62,11 @@ public class ProjectSecuirtyConfig {
                 .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class);
         //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         // .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/task/**").permitAll())
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-       /* http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
+       // http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+        http.authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/grocery/user/**","/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/grocery/product/**").hasRole("ADMIN")
-                        .requestMatchers("/grocery/auth/**").permitAll())*/
+                        .requestMatchers("/grocery/auth/**").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
