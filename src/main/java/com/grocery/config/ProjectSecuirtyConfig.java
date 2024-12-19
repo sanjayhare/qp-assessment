@@ -62,12 +62,31 @@ public class ProjectSecuirtyConfig {
                 .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class);
         //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         // .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/task/**").permitAll())
-       // http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-        http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/grocery/user/**","/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
+        // http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+        Map<String, List<String>> urlRoleMappings = urlConfig.getURLS();
+
+        for (Map.Entry<String, List<String>> entry : urlRoleMappings.entrySet()) {
+            String roles = entry.getKey();
+            List<String> urlPattern = entry.getValue();
+
+            if (roles != null && roles.equalsIgnoreCase("USER")) {
+                http.authorizeHttpRequests((requests) -> urlPattern.forEach(url -> requests
+                        .requestMatchers(url).hasAnyRole("USER", "ADMIN")));
+            }
+            else if (roles != null && roles.equalsIgnoreCase("ADMIN")) {
+                http.authorizeHttpRequests((requests) -> urlPattern.forEach(url -> requests
+                        .requestMatchers(url).hasAnyRole("ADMIN")));
+            }
+            else if (roles != null && roles.equalsIgnoreCase("PUBLIC")) {
+                http.authorizeHttpRequests((requests) -> urlPattern.forEach(url -> requests
+                        .requestMatchers(url).permitAll()));
+            }
+        }
+       /* http.authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/grocery/user/**", "/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/grocery/product/**").hasRole("ADMIN")
-                        .requestMatchers("/grocery/auth/**").permitAll())
-                .formLogin(Customizer.withDefaults())
+                        .requestMatchers("/grocery/auth/**").permitAll())*/
+        http.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

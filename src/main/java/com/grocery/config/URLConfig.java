@@ -16,14 +16,17 @@ public class URLConfig {
         Map<String, List<String>> role = new HashMap<>();
         // add new URL's with comma
         String[] adminUrlArray = {"/grocery/product/**"};
-        String[] userUrlArray = {"/grocery/carts/**","/grocery/orders/**","/grocery/product/get/**"};
+        String[] userUrlArray = {"/grocery/user/**", "/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**"};
+        String[] publicUrlArray = {"/grocery/auth/**"};
 
         // Convert to List using Arrays.asList
         List<String> adurls = Arrays.asList(adminUrlArray);
         List<String> userurls = Arrays.asList(userUrlArray);
+        List<String> publicurls = Arrays.asList(publicUrlArray);
 
         role.put("ADMIN", adurls);
         role.put("USER", userurls);
+        role.put("PUBLIC", publicurls);
 
         return role;
     }
