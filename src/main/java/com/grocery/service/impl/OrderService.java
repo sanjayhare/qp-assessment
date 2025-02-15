@@ -19,8 +19,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
-
-
     private final ProductRepository productRepository;
 
     public OrderService(OrderRepository orderRepository, UserRepository userRepository, CartRepository cartRepository,ProductRepository productRepository) {
@@ -60,15 +58,6 @@ public class OrderService {
         cart.getCartItems().clear();// Clear the cart after placing the order
         productRepository.saveAll(products);//updating product quantity
         Order placedOrder= orderRepository.save(order);
-
-        /*for (Product updatedProduct : products) {
-            System.out.println("updatedProduct="+updatedProduct.getProductId());
-            productRepository.save(updatedProduct);
-        }*/
-
-
-
-
         return placedOrder;
     }
     public List<Order> getOrdersByUser(Integer userId) {

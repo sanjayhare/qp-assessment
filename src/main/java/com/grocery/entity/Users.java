@@ -1,6 +1,8 @@
 package com.grocery.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.grocery.annotations.FieldsValueMatch;
+import com.grocery.annotations.PasswordValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -11,6 +13,11 @@ import java.util.List;
 
 @Data
 @Entity
+@FieldsValueMatch.List({
+        @FieldsValueMatch(
+                field = "pwd",
+                fieldMatch = "confirmPwd",
+                message = "Passwords do not match!")})
 public class Users extends BaseEntity {
 
     @Id
@@ -40,8 +47,14 @@ public class Users extends BaseEntity {
     private String address;
 
     @NotBlank(message="pwd must not be blank")
-    @Size(min = 8, message = "Password must be at least 5 characters long")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @PasswordValidator
     private String pwd;
+
+    @NotBlank(message="pwd must not be blank")
+    @Size(min = 8, message = "ConfirmPwd Password must be at least 8 characters long")
+    @Transient
+    private String confirmPwd;
 
     private String authorities;
 

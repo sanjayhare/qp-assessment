@@ -63,7 +63,7 @@ public class ProjectSecuirtyConfig {
         //.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         // .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**","/task/**").permitAll())
         // http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-        Map<String, List<String>> urlRoleMappings = urlConfig.getURLS();
+      /*  Map<String, List<String>> urlRoleMappings = urlConfig.getURLS();
 
         for (Map.Entry<String, List<String>> entry : urlRoleMappings.entrySet()) {
             String roles = entry.getKey();
@@ -81,11 +81,12 @@ public class ProjectSecuirtyConfig {
                 http.authorizeHttpRequests((requests) -> urlPattern.forEach(url -> requests
                         .requestMatchers(url).permitAll()));
             }
-        }
-       /* http.authorizeHttpRequests((requests) -> requests
+        }*/
+        http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/grocery/user/**", "/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/grocery/product/**").hasRole("ADMIN")
-                        .requestMatchers("/grocery/auth/**").permitAll())*/
+                        .requestMatchers("/grocery/auth/**").permitAll());
+        //http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
         http.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
