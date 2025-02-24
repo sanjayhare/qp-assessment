@@ -82,11 +82,11 @@ public class ProjectSecuirtyConfig {
                         .requestMatchers(url).permitAll()));
             }
         }*/
-        http.authorizeHttpRequests((requests) -> requests
+      /*  http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/grocery/user/**", "/grocery/carts/**", "/grocery/orders/**", "/grocery/product/get/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/grocery/product/**").hasRole("ADMIN")
-                        .requestMatchers("/grocery/auth/**").permitAll());
-        //http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
+                        .requestMatchers("/grocery/auth/**").permitAll());*/
+        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
         http.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
